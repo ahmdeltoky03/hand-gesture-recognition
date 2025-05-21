@@ -1,12 +1,14 @@
+# Set the page title and icon
 import streamlit as st
+st.set_page_config(page_title="Hand Gesture Recognition", page_icon="🖐️")
+
 import tensorflow as tf
 from PIL import Image
 import numpy as np
 from utils import preprocess_image, load_gesture_model
 from constants import CLASS_INDICES, INDEX_TO_CLASS
 
-# Set the page title and icon
-st.set_page_config(page_title="Hand Gesture Recognition", page_icon="🖐️")
+
 
 # Load the model
 model = load_gesture_model()
