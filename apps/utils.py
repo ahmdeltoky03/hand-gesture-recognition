@@ -13,4 +13,5 @@ def preprocess_image(img, target_size= target_size):
 
 @st.cache_resource
 def load_gesture_model():
-    return load_model("./gesture_model.h5")
+    return load_model("../models/gesture_model.h5")
+
