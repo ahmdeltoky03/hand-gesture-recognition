@@ -6,4 +6,4 @@ pillow
 matplotlib
 scikit-image
 pandas
-opencv-python
+opencv-python-headless
