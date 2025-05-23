@@ -13,8 +13,20 @@ model = load_gesture_model()
 
 # --- App Layout ---
 st.title("🖐️ Hand Gesture Recognition System")
-st.markdown("Upload a hand gesture image, or use your camera to capture one. The model will predict what gesture it is.")
+st.markdown("""
+Upload a hand gesture image, or use your camera to capture one. The model will predict what gesture it is.
 
+**Recognized gesture classes:**
+- fist
+- five
+- ok
+- peace
+- rad
+- straight
+- thumbs
+
+If your image does not match any of these gestures, the system will return **'none'**.
+""")
 input_image = None
 
 option = st.radio("Select input method:", ("Upload Image", "Use Camera"))
