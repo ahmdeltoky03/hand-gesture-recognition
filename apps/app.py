@@ -8,29 +8,36 @@ import numpy as np
 from utils import preprocess_image, load_gesture_model
 from constants import CLASS_INDICES, INDEX_TO_CLASS
 
-
-
 # Load the model
 model = load_gesture_model()
 
-
 # --- App Layout ---
 st.title("🖐️ Hand Gesture Recognition System")
-st.markdown("Upload a hand gesture image, and the model will predict what gesture it is.")
+st.markdown("Upload a hand gesture image, or use your camera to capture one. The model will predict what gesture it is.")
 
-uploaded_file = st.file_uploader("Choose an image", type=["jpg", "jpeg", "png"])
+input_image = None
 
-if uploaded_file:
-    image = Image.open(uploaded_file).convert("RGB")
-    st.image(image, caption="Uploaded Image", use_container_width=True)
+option = st.radio("Select input method:", ("Upload Image", "Use Camera"))
+
+if option == "Upload Image":
+    uploaded_file = st.file_uploader("Choose an image", type=["jpg", "jpeg", "png"])
+    if uploaded_file:
+        input_image = Image.open(uploaded_file).convert("RGB")
+elif option == "Use Camera":
+    camera_file = st.camera_input("Take a picture")
+    if camera_file:
+        input_image = Image.open(camera_file).convert("RGB")
+
+if input_image is not None:
+    st.image(input_image, caption="Input Image", use_container_width=True)
 
     with st.spinner("Analyzing image..."):
-        processed_img = preprocess_image(image)
+        processed_img = preprocess_image(input_image)
         prediction = model.predict(processed_img)[0]
         predicted_index = np.argmax(prediction)
         predicted_label = INDEX_TO_CLASS.get(predicted_index, "Unknown")
         confidence = float(tf.nn.softmax(prediction)[predicted_index])
-        
+
         # Show prediction vector with class names
         softmax_pred = tf.nn.softmax(prediction).numpy()
         pred_with_labels = [
@@ -39,8 +46,4 @@ if uploaded_file:
         ]
         st.write("Prediction vector:", pred_with_labels)
 
-    # st.success(f"🧠 **Prediction:** `{predicted_label}`")
     st.markdown(f"<h3 style='text-align: center;'>🧠 Prediction: {predicted_label}</h3>", unsafe_allow_html=True)
-    # st.markdown(f"**Confidence Score:** `{confidence:.2f}`")
-
-    # st.progress(confidence)
